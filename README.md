@@ -7,7 +7,7 @@
 
 2) En caso de hacer testing desde POSTMAN: para los métodos POST, PUT y DELETE de la ruta /api/productos, se incorporo un middleware de autorización según el rol del usuario. Por lo que es necesario pasar un header "rol" con value "admin" para que la API responda correctamente y no devuelva un error de autorización.
 
-3) link a deploy en Glitch: ""
+3) link a deploy en Glitch: https://mire-pale-carbon.glitch.me/
 
 4) Dejo ejemplos de productos para testear.
 
