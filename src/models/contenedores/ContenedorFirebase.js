@@ -1,8 +1,8 @@
 import admin from "firebase-admin";
-import {firebase} from "../../config.js";
+import config from "../../config.js";
 
 admin.initializeApp({
-    credential: admin.credential.cert(firebase)
+    credential: admin.credential.cert(config.firebase)
 });
 
 const db = admin.firestore();

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import {URLMongo} from "../../config.js";
+import config from "../../config.js";
 
-mongoose.connect(URLMongo, (err, res)=>{
+mongoose.connect(config.URLMongo, (err, res)=>{
     if (err) throw err;
     return console.log("Base de datos conectada.");
 })

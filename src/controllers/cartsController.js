@@ -21,7 +21,7 @@ const addProduct = async (req, res)=>{
     if (product?.error) return res.status(product.error.status).json(product.error.message);
 
     const cart = await cartsModel.getById(idCart);
-    const productos = cart?.data?.productos
+    const productos = cart?.data?.productos;
     const prodInCart = productos?.find(prod => prod.data._id == idProd);
 
     if (!prodInCart){

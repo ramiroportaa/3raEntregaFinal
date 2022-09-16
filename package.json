@@ -1,5 +1,5 @@
 {
-  "name": "2daentregafinal",
+  "name": "3raentregafinal",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -12,9 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "firebase-admin": "^11.0.0",
-    "mongoose": "^6.4.6"
+    "mongoose": "^6.4.6",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
   }
 }

@@ -1,5 +1,9 @@
-export const URLMongo = "mongodb+srv://coder:coder123@coderhouse.ymdhmxh.mongodb.net/ecommerce?retryWrites=true&w=majority";
-export const firebase = {
+import {config} from "dotenv";
+config();
+
+export default {
+  URLMongo: process.env.URLMONGO,
+  firebase: {
     type: "service_account",
     project_id: "coderhouse-backend-6eb18",
     private_key_id: "40800e875591c9e9e1d6fe7a917ad6c7287f707f",
@@ -10,4 +14,7 @@ export const firebase = {
     token_uri: "https://oauth2.googleapis.com/token",
     auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
     client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-sp6au%40coderhouse-backend-6eb18.iam.gserviceaccount.com"
-  }
+  },
+  PORT: process.env.PORT || 8080,
+  DATABASE: process.env.DATABASE || "mongoDB"
+}

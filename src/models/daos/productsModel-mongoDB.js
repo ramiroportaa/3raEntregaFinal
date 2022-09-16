@@ -3,7 +3,7 @@ import { ContenedorMongo } from "../contenedores/ContenedorMongo.js";
 class ProductsModel extends ContenedorMongo {
     constructor(){
         super("product", {
-            timestamp: Number,
+            timestamp: {type: Number, require: true},
             nombre: {type: String, require: true},
             descripcion: String,
             codigo: String,

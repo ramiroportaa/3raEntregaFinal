@@ -1,11 +1,9 @@
-import {config} from "dotenv";
-config();
+import config from "../config.js";
 
-const DATABASE = process.env.DATABASE;
 let cartsModel;
 let productsModel;
 
-switch (DATABASE) {
+switch (config.DATABASE) {
     case "mongoDB":
         const { default: cartsModelDaoMongo } = await import("./daos/cartsModel-mongoDB.js");
         const { default: productsModelDaoMongo } = await import("./daos/productsModel-mongoDB.js");
