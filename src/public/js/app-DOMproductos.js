@@ -13,7 +13,7 @@ function escribirProductosHTML (arrayProductos, columnas=3) {
         contenedor.innerHTML = `<!-- PRODUCT ${producto._id}-->
                         <div class="product text-center">
                         <div class="mb-3 position-relative">
-                            <div class="badge text-black badge-primary">${(producto.stock > 0) ? "DISPONIBLE" : "AGOTADO"}</div><a id="detalle-${producto._id}" class="d-block" href="detalle.html"><img class="img-fluid w-100" src="${producto.foto}" alt="${producto.nombre}"></a>
+                            <div class="badge text-black badge-primary">${(producto.stock > 0) ? "DISPONIBLE" : "AGOTADO"}</div><a id="detalle-${producto._id}" class="d-block" href="/detalle"><img class="img-fluid w-100" src="${producto.foto}" alt="${producto.nombre}"></a>
                             <div class="product-overlay">
                             <ul class="mb-0 list-inline">
                                 <li class="list-inline-item m-0 p-0"><a id="agregarProducto-${producto._id}" class="btn btn-sm btn-dark" href="#">Agregar al carrito</a></li>

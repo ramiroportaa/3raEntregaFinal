@@ -191,7 +191,7 @@ const itemsToMP = cart.map((prod)=>{
 })
 //funcion de fetch (post) a MercadoPago.
 const mercadoPago = async () =>{
-    const BACK_URL = location.href.replace("checkout.html","index.html")
+    const BACK_URL = location.href.replace("/tienda/checkout","/tienda")
     const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
         method: "POST",
         headers: {

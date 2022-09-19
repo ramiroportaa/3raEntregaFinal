@@ -19,8 +19,8 @@ const renderCart = async()=>{
         total += (producto.data.precio * producto.quantity);
         $("#productos").append(`<tr>
                                 <th class="pl-0 border-0" scope="row">
-                                <div class="media align-items-center"><a id="detalle-${producto.data._id}" class="reset-anchor d-block" href="detalle.html"><img src="${producto.data.foto}" alt="${producto.data.nombre}" width="70"/></a>
-                                    <div class="media-body ms-3"><strong class="h6"><a id="detalle2-${producto.data._id}" class="reset-anchor" href="detalle.html">${producto.data.nombre}</a></strong></div>
+                                <div class="media align-items-center"><a id="detalle-${producto.data._id}" class="reset-anchor d-block" href="/detalle"><img src="${producto.data.foto}" alt="${producto.data.nombre}" width="70"/></a>
+                                    <div class="media-body ms-3"><strong class="h6"><a id="detalle2-${producto.data._id}" class="reset-anchor" href="/detalle">${producto.data.nombre}</a></strong></div>
                                 </div>
                                 </th>
                                 <td class="align-middle border-0">

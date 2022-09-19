@@ -2,7 +2,7 @@ import __dirname from "../utils.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import usersModel from "../models/daos/usersModel.js";
+import {usersModel} from "../models/index.js";
 
 const isValidPassword = (password, encPassword) =>{
     const isValid = bcrypt.compareSync(password, encPassword);

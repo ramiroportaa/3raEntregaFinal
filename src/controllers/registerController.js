@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import __dirname from "../utils.js";
-import usersModel from "../models/daos/usersModel.js";
+import {usersModel} from "../models/index.js";
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -15,7 +15,7 @@ const postRegister = async (req, res)=>{
     newUser.password = createHash(req.body.password);
     newUser.avatar = `/uploads/${req.file.filename}`;
 
-    const userDB = await usersModel.createUser(newUser);
+    const userDB = await usersModel.add(newUser);
     
     if (!userDB) return res.render("error.ejs", {error: "El usuario o el mail ya están registrados"});
 

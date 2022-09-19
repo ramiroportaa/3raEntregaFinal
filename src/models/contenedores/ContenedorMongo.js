@@ -34,7 +34,7 @@ export class ContenedorMongo {
         try {
             data.timestamp = Date.now();
             const res = await this.model.create(data);
-            return res
+            return res;
         } catch (error) {
             console.log(`error in adding ${this.collection}: ${error}`);
             return {error: {message: `error in adding ${this.collection}`, status: 500}};

@@ -1,6 +1,4 @@
-import {productsModel} from "../models/index.js";
-import {cartsModel} from "../models/index.js";
-import usersModel from "../models/daos/usersModel.js";
+import {productsModel, cartsModel, usersModel} from "../models/index.js";
 
 const getProducts = async (req, res)=>{
     const idCart = req.params.id;
@@ -15,7 +13,7 @@ const createCart = async (req, res)=>{
     if (data?.error) return res.status(data.error.status).json(data.error.message);
 
     //Editamos el valor currentCart del user que lo creo.
-    const edit = await usersModel.editById(req.user._id, {currentCart: data._id});
+    const edit = await usersModel.updateOne(req.user._id, {currentCart: data._id});
     if (edit?.error) return res.status(data.error.status).json(data.error.message);
 
     //Devolvemos al cliente el id de carrito creado.
@@ -60,7 +58,7 @@ const deleteById = async (req, res)=>{
     if (data?.error) return res.status(data.error.status).json(data.error.message);
 
     //Editamos el valor currentCart del user que lo borro.
-    data = await usersModel.editById(req.user._id, {currentCart: ""});
+    data = await usersModel.updateOne(req.user._id, {currentCart: ""});
     if (data?.error) return res.status(data.error.status).json(data.error.message);
 
     res.sendStatus(204);
