@@ -10,32 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <!-- Css -->
     <link rel="stylesheet" href="/assets/css/style.css">
-    <title>1er Pre-entrega Final | BackEnd | CoderHouse 2022</title>
+    <title>3er Pre-entrega Final | BackEnd | CoderHouse 2022</title>
 </head>
 <body>
     <header>
-        <!-- Menu de navegacion -->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top mask-custom shadow-0 bg-white">
-            <div class="container">
-                <a class="navbar-brand" href="#"><img src="/assets/img/logo.png" alt="HEY BRO" width="90rem"></a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                  <li class="nav-item">
-                    <a class="nav-link active" href="/admin">PANEL</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/tienda">IR AL E-SHOP</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-        </nav>
-        <%- include("./includes/nav.ejs") %>
+        <%- include("./includes/nav-admin.ejs") %>
+        <%- include("./includes/nav-perfil.ejs") %>
     </header>
 
     <!-- Alertas informativas -->
