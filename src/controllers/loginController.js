@@ -10,8 +10,9 @@ const isValidPassword = (password, encPassword) =>{
 }
 
 passport.use("login", new LocalStrategy(
-    async (username, password, done) => {
-        const user = await usersModel.getByUsername(username);
+    { usernameField: "email"},
+    async (email, password, done) => {
+        const user = await usersModel.getByEmail(email);
 
         if (!user || !isValidPassword(password, user.password)) return done(null, false);
 
@@ -20,21 +21,22 @@ passport.use("login", new LocalStrategy(
 ));
 
 passport.serializeUser((user, done) => {
-    done(null, user.username);
+    done(null, user.email);
 });
-passport.deserializeUser(async (username, done) => {
-    const user = await usersModel.getByUsername(username);
+passport.deserializeUser(async (email, done) => {
+    const user = await usersModel.getByEmail(email);
     done(null, user);
 });
 
 const getLogin = (req, res)=>{
-    if (req.isAuthenticated()) return res.redirect("/tienda.html"); //agregar validacion de autorizacion y redirigir a /tienda si es user o a /admin si es admin...
+    if (req.isAuthenticated() && req.user.role == "admin") return res.redirect("/admin");
+    if (req.isAuthenticated()) return res.redirect("/tienda");
     res.sendFile(__dirname + "/views/login.html");
 }
 
 const postLogin = (req, res)=>{
-    //Deberia pasar el html a EJS para renderear los datos del user logeado...
-    res.redirect("/tienda.html"); //agregar validacion de autorizacion y redirigir a /tienda si es user o a /admin si es admin...
+    if (req.user.role == "admin") return res.redirect("/admin");
+    res.redirect("/tienda");
 }
 
 export default {

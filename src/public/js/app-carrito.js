@@ -2,7 +2,7 @@ const renderCart = async()=>{
     const productosHTML = document.getElementById("productos"); 
     const btnDeleteCart = document.querySelector("[data-delete]");
     productosHTML.innerHTML = "";
-    await getProductsCartFromAPI(idCart);
+    await getProductsCartFromAPI();
     let total = 0;
     //Si el array de productos en la ultima orden se encuentra vacio...
     if (!cart?.length){
@@ -41,7 +41,7 @@ const renderCart = async()=>{
                             </tr> `);
         
         document.querySelector(`#carrito-borrarItem-${producto.data._id}`).addEventListener("click", async () => {
-            await deleteProductCartAPI(idCart, producto.data._id);
+            await deleteProductCartAPI(producto.data._id);
             await renderSidebarCart();
             await renderCart();
         });
@@ -50,9 +50,9 @@ const renderCart = async()=>{
             let cantidad = document.querySelector(`#cantidad-carrito-${producto.data._id}`).value
             cantidad = parseInt(cantidad);
             if (producto.data.stock < cantidad) return alertaInfo(`Solo quedan ${producto.data.stock} unidades`);
-            await deleteProductCartAPI(idCart, producto.data._id);
-            await addProductCartAPI(idCart, producto.data._id, cantidad);
-            await renderCart()
+            await deleteProductCartAPI(producto.data._id);
+            await addProductCartAPI(producto.data._id, cantidad);
+            await renderCart();
             return alertaInfo(`Modificación del carrito exitosa`);
         });
 
@@ -72,7 +72,7 @@ const renderCart = async()=>{
     });
     btnDeleteCart.classList.add("d-block");
     btnDeleteCart.addEventListener("click", async function () {
-        await deleteCartAPI(idCart);
+        await deleteCartAPI();
         location.reload();
     })
 

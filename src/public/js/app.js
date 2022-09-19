@@ -6,7 +6,11 @@ let productos = []
 //Creamos un array para agrupar todos los productos que se añaden al carrito.
 let cart = [];
 //Obtener el id del cart del usuario.
-let idCart = sessionStorage.getItem("idCart") || 0;
+const getIdCartFromAPI = async ()=>{
+    let res = await fetch("/api/carrito/current");
+    const data = await res.json();
+    return data.idCart;
+}
 
 //Funciones de inteaccion con la API
     //Fetchs a /api/productos
@@ -66,14 +70,19 @@ const deleteProductAPI = async (id)=>{
 
     //Fetchs a /api/carrito
         //Obtener los productos existentes en el carrito del usuario y pushearlos al array de cart.
-const getProductsCartFromAPI = async (id)=>{
+const getProductsCartFromAPI = async ()=>{
+    const id = await getIdCartFromAPI();
     let res = await fetch(`/api/carrito/${id}/productos`);
     const data = await res.json();
     if (res.status == 404){
-        idCart = await createCartAPI();
-        sessionStorage.setItem("idCart", idCart);
+        await createCartAPI();
+    }
+    if (data?.error){
+        alertaInfo(data.descripcion);
+        return false;
     }
     cart = data.products;
+    return true;
 }
         //Crear un carrito en la API y obtener su ID.
 const createCartAPI = async ()=>{
@@ -81,12 +90,12 @@ const createCartAPI = async ()=>{
         method: "POST"
     });
     const data = await res.json();
-    if (res.status != 201) return alertaInfo(data);
-    sessionStorage.setItem("idCart", data.idCart);
+    if (res.status != 201) return alertaInfo(data.descripcion);
     return data.idCart;
 }
         //Eliminar un carrito completo de la API.
-const deleteCartAPI = async (id)=>{
+const deleteCartAPI = async ()=>{
+    const id = await getIdCartFromAPI();
     let res = await fetch(`/api/carrito/${id}`,{
         method: "DELETE"
     });
@@ -97,8 +106,9 @@ const deleteCartAPI = async (id)=>{
     alertaInfo("Carrito eliminado exitosamente");
 }
         //Agregar un producto al carrito en la API.
-const addProductCartAPI = async (idC, idProd, quantity=1)=>{
+const addProductCartAPI = async (idProd, quantity=1)=>{
     try {
+        const idC = await getIdCartFromAPI();
         const obj = {
             idProd: idProd,
             quantity: quantity
@@ -112,6 +122,7 @@ const addProductCartAPI = async (idC, idProd, quantity=1)=>{
         });
         if (res.status != 204){
             const data = await res.json();
+            if (data?.error) return alertaInfo(data.descripcion);
             return alertaInfo(data);
         }
         alertaInfo("Producto agregado al carrito exitosamente");
@@ -120,7 +131,8 @@ const addProductCartAPI = async (idC, idProd, quantity=1)=>{
     }
 }
         //Eliminar un producto de un carrito en la API.
-const deleteProductCartAPI = async (idC, idP)=>{
+const deleteProductCartAPI = async (idP)=>{
+    const idC = await getIdCartFromAPI();
     let res = await fetch(`/api/carrito/${idC}/productos/${idP}`,{
         method: "DELETE"
     });

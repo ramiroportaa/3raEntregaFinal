@@ -11,15 +11,9 @@ const getRegister = (req, res)=>{
 }
 
 const postRegister = async (req, res)=>{
-    const newUser = {
-        username: req.body.username,
-        email: req.body.email,
-        password: createHash(req.body.password),
-        address: req.body.address,
-        age: req.body.age,
-        tel: req.body.tel,
-        avatar: req.body.avatar //Por ahora probar con URL, pero luego usar MULTER (clase 8).
-    }
+    const newUser = req.body;
+    newUser.password = createHash(req.body.password);
+    newUser.avatar = `/uploads/${req.file.filename}`;
 
     const userDB = await usersModel.createUser(newUser);
     

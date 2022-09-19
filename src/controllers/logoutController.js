@@ -1,6 +1,6 @@
 const getLogout = (req, res)=>{
     if (req.isAuthenticated()){
-        const name = req.user.username;
+        const name = req.user.firstName;
         req.logout({}, err => err && console.log(err));
         return res.render("logout.ejs", {name})
     };

@@ -1,15 +1,13 @@
-import __dirname from "../utils.js";
-
 const getPanel = (req, res)=>{
-    res.sendFile(__dirname + "/views/admin.html");
+    res.render("admin.ejs", {avatar: req.user.avatar, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, role: req.user.role});
 }
 
 const getProducts = (req, res)=>{
-    res.sendFile(__dirname + "/views/admin-productos.html");
+    res.render("admin-productos.ejs", {avatar: req.user.avatar, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, role: req.user.role});
 }
 
 const getForm = (req, res)=>{
-    res.sendFile(__dirname + "/views/admin-form.html");
+    res.render("admin-form.ejs", {avatar: req.user.avatar, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, role: req.user.role});
 }
 
 export default {

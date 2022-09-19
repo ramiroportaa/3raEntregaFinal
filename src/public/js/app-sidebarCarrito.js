@@ -3,7 +3,14 @@
 const barraCarritoListaItems = document.getElementById("barraCarrito-listaItems");
 
 async function escribirProductosCarrito () {
-    await getProductsCartFromAPI(idCart);
+    const bandera = await getProductsCartFromAPI();
+    if (!bandera){
+        barraCarritoListaItems.innerHTML = `
+        <p>Debes iniciar sesión para comprar</p>
+        <a class="btn btn-primary text-white" href="/login" role="button">Login</a>
+        `;
+        return;
+    };
     barraCarritoListaItems.innerHTML = "";
     let total = 0;
     cart.forEach((producto) =>{
@@ -25,7 +32,7 @@ async function escribirProductosCarrito () {
         const borrarProducto = document.getElementById(`barraCarrito-borrarItem-${producto.data._id}`);
         //Añadimos manejador de evento click a dicho nodo.
         borrarProducto.addEventListener("click", async () => {
-            await deleteProductCartAPI(idCart, producto.data._id);
+            await deleteProductCartAPI(producto.data._id);
             await renderSidebarCart();
         });
     })
@@ -41,7 +48,7 @@ async function escribirProductosCarrito () {
 }
 
 async function renderSidebarCart() {
-    await getProductsCartFromAPI(idCart);
+    await getProductsCartFromAPI();
     await escribirProductosCarrito();
      //Escribo por DOM la cantidad de productos en el carrito.
     navCarrito.innerHTML = `Carrito (${cart.length})`;
@@ -69,4 +76,4 @@ barraCarrito.addEventListener("click", (e)=>{
     e.stopPropagation();
 });
 
-setTimeout(renderSidebarCart, 1000)
+setTimeout(renderSidebarCart, 1000);

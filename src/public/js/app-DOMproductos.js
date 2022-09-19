@@ -29,7 +29,7 @@ function escribirProductosHTML (arrayProductos, columnas=3) {
         const agregarProducto = document.getElementById(`agregarProducto-${producto._id}`);
         //Añadimos manejador de evento click a dicho nodo.
         agregarProducto.addEventListener("click", async () => {
-            await addProductCartAPI(idCart, producto._id, 1);
+            await addProductCartAPI(producto._id, 1);
             await renderSidebarCart();
         });
         //Almacenamos en constante el nodo de cada imagen de producto...
@@ -100,7 +100,7 @@ function escribirModalesHTML (arrayProductos){
         //Asociamos el evento a botón recién creado.
         document.querySelector(`#agregarProducto-${producto._id}-modal`).addEventListener("click", async ()=>{
             const cantidad = parseInt(document.querySelector(`#cantidad-modal-${producto._id}`).value);
-            await addProductCartAPI(idCart, producto._id, cantidad);
+            await addProductCartAPI(producto._id, cantidad);
             await renderSidebarCart();
         })
 })

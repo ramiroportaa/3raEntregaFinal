@@ -26,7 +26,7 @@ let bandera = false;
 //======= RESUMEN DE ORDEN ========
 const renderOrden = async ()=>{
     //Agregamos al DOM cada producto en la orden.
-    await getProductsCartFromAPI(idCart);
+    await getProductsCartFromAPI();
     let total = 0;
     cart.forEach(producto =>{
         total += (producto.data.precio * producto.quantity);
@@ -62,11 +62,11 @@ inputOtroDomicilio.addEventListener("change",()=>{
     otroDomicilio.classList.toggle("d-none");
 });
 //Evento submit del formulario.
-formulario.addEventListener("submit", function (e){
+formulario.addEventListener("submit", async function (e){
     e.preventDefault();
     validarForm();
     if (bandera) {
-        pushDatos();
+        await pushDatos();
         postOrden();
         finalizarOrden();
     };
@@ -132,9 +132,9 @@ function validarForm () {
     
 }
 //funcion para pushear los datos de la orden al array "infoPost" que luego sera enviado al servidor.
-function pushDatos(){
+async function pushDatos(){
     infoPost.push({
-        idOrden: idCart,
+        idOrden: await getIdCartFromAPI(),
         productos: cart,
         fac_nombre: iNombre.value,
         fac_apellido: iApellido.value,
@@ -206,7 +206,7 @@ const mercadoPago = async () =>{
         })
     })
     const data = await response.json();
-    await deleteCartAPI(idCart);
+    await deleteCartAPI();
     location.replace(data.init_point);
 };
 

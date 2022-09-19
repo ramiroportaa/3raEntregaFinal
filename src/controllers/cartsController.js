@@ -1,5 +1,6 @@
 import {productsModel} from "../models/index.js";
 import {cartsModel} from "../models/index.js";
+import usersModel from "../models/daos/usersModel.js";
 
 const getProducts = async (req, res)=>{
     const idCart = req.params.id;
@@ -9,8 +10,15 @@ const getProducts = async (req, res)=>{
 };
 
 const createCart = async (req, res)=>{
-    const data = await cartsModel.add({productos: []});;
+    //Creamos un carrito con 0 productos.
+    const data = await cartsModel.add({productos: []});
     if (data?.error) return res.status(data.error.status).json(data.error.message);
+
+    //Editamos el valor currentCart del user que lo creo.
+    const edit = await usersModel.editById(req.user._id, {currentCart: data._id});
+    if (edit?.error) return res.status(data.error.status).json(data.error.message);
+
+    //Devolvemos al cliente el id de carrito creado.
     res.status(201).json({ idCart: data._id });
 };
 
@@ -48,8 +56,13 @@ const addProduct = async (req, res)=>{
 
 const deleteById = async (req, res)=>{
     const idCart = req.params.id;
-    const data = await cartsModel.deleteById(idCart);
+    let data = await cartsModel.deleteById(idCart);
     if (data?.error) return res.status(data.error.status).json(data.error.message);
+
+    //Editamos el valor currentCart del user que lo borro.
+    data = await usersModel.editById(req.user._id, {currentCart: ""});
+    if (data?.error) return res.status(data.error.status).json(data.error.message);
+
     res.sendStatus(204);
 };
 
@@ -65,10 +78,16 @@ const deleteProductById = async (req, res)=>{
     res.sendStatus(204);
 };
 
+const getCurrentCartId = async (req, res)=>{
+    const idCart = req.user.currentCart;
+    res.status(200).json({idCart});
+};
+
 export default {
     getProducts,
     createCart,
     addProduct,
     deleteById,
-    deleteProductById
+    deleteProductById,
+    getCurrentCartId
 }
