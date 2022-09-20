@@ -7,8 +7,9 @@ router.use(tiendaController.userInfo);
 
 router.get("/", tiendaController.getTienda);
 router.get("/carrito", tiendaController.getCarrito);
-router.get("/checkout", tiendaController.getCheckout);
 router.get("/detalle", tiendaController.getDetalle);
+router.get("/checkout", tiendaController.getCheckout);
+router.post("/checkout/newOrder", tiendaController.newOrder);
 
 
 export default router;

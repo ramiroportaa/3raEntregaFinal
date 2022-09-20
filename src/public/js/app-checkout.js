@@ -68,7 +68,7 @@ formulario.addEventListener("submit", async function (e){
     if (bandera) {
         await pushDatos();
         postOrden();
-        finalizarOrden();
+        //finalizarOrden();
     };
 });
 //Funcion de validacion del formulario
@@ -134,8 +134,6 @@ function validarForm () {
 //funcion para pushear los datos de la orden al array "infoPost" que luego sera enviado al servidor.
 async function pushDatos(){
     infoPost.push({
-        idOrden: await getIdCartFromAPI(),
-        productos: cart,
         fac_nombre: iNombre.value,
         fac_apellido: iApellido.value,
         fac_email: iEmail.value,
@@ -156,58 +154,22 @@ async function pushDatos(){
 }
 //Funcion de POST usando JQUERY.
 function postOrden () {
-    $.post("https://jsonplaceholder.typicode.com/posts", infoPost[0] , (response, state)=>{
+    $.post("/tienda/checkout/newOrder", infoPost[0] , (response, state)=>{
     if (state === "success"){
         Swal.fire({
-            title: `<strong>Orden #${response.idOrden} enviada</strong>`,
+            title: `<strong>Orden #${response.idCart} enviada</strong>`,
             icon: 'success',
-            html:
-              `Gracias ${response.fac_nombre} por su compra.
-              Será redireccionado al checkout de MERCADOPAGO` ,
+            html: response.message,
             showCloseButton: true,
             showCancelButton: false,
             showConfirmButton: false,
             focusConfirm: false,
-            timer: 2000
+            timer: 10000
           }).then(()=>{
-              mercadoPago()
+              location.href = "/tienda";
           });
     }
 })
 }
-
-//====== API de MercadoPago =======
-//Creamos nuevo array con los productos de la orden pero con la estructura que pide la API de MercadoPago.
-const itemsToMP = cart.map((prod)=>{
-    return {
-       title: prod.product.nombre,
-       description: prod.product.descripcion,
-       picture_url: "",
-       category_id: "",
-       quantity: prod.quantity,
-       currency_id: "ARS",
-       unit_price: prod.product.precio
-    }
-})
-//funcion de fetch (post) a MercadoPago.
-const mercadoPago = async () =>{
-    const BACK_URL = location.href.replace("/tienda/checkout","/tienda")
-    const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
-        method: "POST",
-        headers: {
-            Authorization: "Bearer TEST-3644145109317975-102219-77b7021e8fcb20c51996fe477139bc44-208599844"
-        },
-        body: JSON.stringify({
-            items: itemsToMP,
-            back_urls: {
-                success: BACK_URL,
-                failure: BACK_URL
-            }
-        })
-    })
-    const data = await response.json();
-    await deleteCartAPI();
-    location.replace(data.init_point);
-};
 
 renderOrden();
