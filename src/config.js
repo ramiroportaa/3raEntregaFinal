@@ -1,11 +1,11 @@
 import {config} from "dotenv";
-import firebase from '../firebase-adminsdk.json' assert {type: 'json'};
+//import firebase from '../firebase-adminsdk.json' assert {type: 'json'};
 config();
 
 export default {
   MODO: process.env.MODO || "FORK",
   URLMongo: process.env.URLMONGO,
-  firebase,
+  firebase: "",
   PORT: process.env.PORT || 8080,
   DATABASE: process.env.DATABASE || "mongoDB",
   TEST_MAIL: process.env.TEST_MAIL,
