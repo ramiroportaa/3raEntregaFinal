@@ -1,5 +1,5 @@
 import __dirname from "../utils.js";
-import {cartsModel} from "../models/index.js";
+import {cartsModel, usersModel} from "../models/index.js";
 import mailer from "../services/mailer.js";
 import twilioClient from "../services/twilioClient.js";
 import config from "../config.js";
@@ -117,7 +117,9 @@ const newOrder = async (req, res) => {
       logger.warn(error);
   }
 
-  //Borrar carrito y actualizar currentCart de user? O lo hago desde el front?
+  //Borro carrito y actualizo currentCart de user.
+  await cartsModel.deleteById(idCart);
+  await usersModel.updateOne(req.user._id, {currentCart: ""});
 
   res.status(201).json({idCart, message: "Orden enviada, espere a ser contactado por alguno de nuestros agentes de ventas!"});
 };

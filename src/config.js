@@ -3,6 +3,7 @@ import firebase from '../firebase-adminsdk.json' assert {type: 'json'};
 config();
 
 export default {
+  MODO: process.env.MODO || "FORK",
   URLMongo: process.env.URLMONGO,
   firebase,
   PORT: process.env.PORT || 8080,
