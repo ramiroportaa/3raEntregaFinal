@@ -3,6 +3,7 @@ import __dirname from "../utils.js";
 import {usersModel} from "../models/index.js";
 import mailer from "../services/mailer.js";
 import config from "../config.js";
+import logger from "../services/logger.js";
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -43,7 +44,7 @@ const postRegister = async (req, res)=>{
     try {
         await mailer.sendMail(mailOptions);
     } catch (error) {
-        console.log(error);
+        logger.warn(error);
     }
 
     res.redirect("/login");

@@ -3,6 +3,7 @@ import {cartsModel} from "../models/index.js";
 import mailer from "../services/mailer.js";
 import twilioClient from "../services/twilioClient.js";
 import config from "../config.js";
+import logger from "../services/logger.js";
 
 const userInfo = (req, res, next)=>{
   req.userInfo = req.isAuthenticated()
@@ -113,7 +114,7 @@ const newOrder = async (req, res) => {
       await twilioClient.messages.create(wspOptions);
       await twilioClient.messages.create(smsOptions);
   } catch (error) {
-      console.log(error);
+      logger.warn(error);
   }
 
   //Borrar carrito y actualizar currentCart de user? O lo hago desde el front?

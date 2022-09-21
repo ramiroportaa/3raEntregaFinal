@@ -1,5 +1,6 @@
 import admin from "firebase-admin";
 import config from "../../config.js";
+import logger from "../../services/logger.js";
 
 admin.initializeApp({
     credential: admin.credential.cert(config.firebase)
@@ -24,7 +25,7 @@ export class ContenedorFirebase {
             });
             return {data};
         } catch (error) {
-            console.log(`error in getting ${this.collectionName}: ${error}`);
+            logger.warn(`error in getting ${this.collectionName}: ${error}`);
             return {error: {message: `error in getting ${this.collectionName}`, status: 500}};
         }
     }
@@ -36,7 +37,7 @@ export class ContenedorFirebase {
             if (data) return {data};
             return {error: {message: `no ${this.collectionName} with ID: ${id}`, status: 404}};
         } catch (error) {
-            console.log(`error in getting ${this.collectionName}: ${error}`);
+            logger.warn(`error in getting ${this.collectionName}: ${error}`);
             return {error: {message: `error in getting ${this.collectionName}`, status: 500}};
         }
     }
@@ -46,7 +47,7 @@ export class ContenedorFirebase {
             const res = await this.collection.add(data);
             return {_id: res.id}
         } catch (error) {
-            console.log(`error in adding ${this.collectionName}: ${error}`);
+            logger.warn(`error in adding ${this.collectionName}: ${error}`);
             return {error: {message: `error in adding ${this.collectionName}`, status: 500}};
         }
     }
@@ -55,7 +56,7 @@ export class ContenedorFirebase {
             const doc = this.collection.doc(id);
             await doc.update(NewDataObj);
         } catch (error) {
-            console.log(`error in updating ${this.collectionName}: ${error}`);
+            logger.warn(`error in updating ${this.collectionName}: ${error}`);
             return {error: {message: `error in updating ${this.collectionName}`, status: 500}};
         }
     }
@@ -64,7 +65,7 @@ export class ContenedorFirebase {
             const doc = this.collection.doc(id);
             await doc.delete();
         } catch (error) {
-            console.log(`error in deleting ${this.collectionName}: ${error}`);
+            logger.warn(`error in deleting ${this.collectionName}: ${error}`);
             return {error: {message: `error in deleting ${this.collectionName}`, status: 500}};
         }
     }
