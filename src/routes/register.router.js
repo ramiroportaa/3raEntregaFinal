@@ -1,5 +1,5 @@
 import { Router } from "express";
-import registerController from "../controllers/registerController.js";
+import registerController from "../controllers/register.controller.js";
 import {multerUpload} from "../utils/multerUpload.js";
 import { multerFileValidator } from "../middlewares/index.js";
 

@@ -1,4 +1,5 @@
 import WSresponse from "../libs/WSresponse.js";
+import logger from "../utils/logger.js";
 
 //Mid de AUTENTICACION.
 const auth = (req, res, next)=>{
@@ -12,6 +13,7 @@ const ownerCartAuth = (req, res, next)=>{
     return res.status(401).json(new WSresponse(null, 'No eres el dueño del carrito', true, -1));
 };
 
+//Mid de autenticacion y AUTORIZACION...
 const adminAuth = (req, res, next)=>{
     if (req.isAuthenticated()){
         const role = req.user.role;
@@ -22,13 +24,27 @@ const adminAuth = (req, res, next)=>{
 
 const multerFileValidator = (req, res, next)=>{
     const file = req.file;
-    if (!file) return res.status(400).json(new WSresponse(null, 'Error al subir archivo de imagen (avatar)', true));
+    if (!file){
+        logger.warn('Error al subir archivo de imagen (avatar) con multer');
+        return res.status(400).json(new WSresponse(null, 'Error al subir archivo de imagen (avatar)', true));
+    };
     next();
 }
+
+const generalError = (err, req, res, next) => {
+    logger.error(err.stack);
+    res.status(500).send('Something broke!');
+}
+
+const notFound = (req, res)=>{
+    res.status(404).json(new WSresponse(null, `ruta ${req.originalUrl} método ${req.method} no implementada`, true, -2));
+};
 
 export {
     auth,
     ownerCartAuth,
     adminAuth,
-    multerFileValidator
+    multerFileValidator,
+    generalError,
+    notFound
 }
