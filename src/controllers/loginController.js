@@ -1,4 +1,4 @@
-import __dirname from "../utils.js";
+import __dirname from "../dirname.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";

@@ -1,6 +1,6 @@
 import admin from "firebase-admin";
 import config from "../../config.js";
-import logger from "../../services/logger.js";
+import logger from "../../utils/logger.js";
 
 admin.initializeApp({
     credential: admin.credential.cert(config.firebase)
@@ -8,7 +8,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-export class ContenedorFirebase {
+export class FirebaseContainer {
     constructor(collectionName){
         this.collectionName = collectionName;
         this.collection = db.collection(collectionName);

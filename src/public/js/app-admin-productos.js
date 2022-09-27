@@ -37,7 +37,18 @@ function escribirProductosHTML (arrayProductos, columnas=3) {
               }).then((result) => {
                 if (result.isConfirmed) {
                     deleteProductAPI(producto._id).then(res => {
-                        initial();
+                        Swal.fire({
+                            title: `<strong>Producto ${producto.nombre} ELIMINADO!</strong>`,
+                            icon: 'success',
+                            html: "Se recargara la pagina!",
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            focusConfirm: false,
+                            timer: 5000
+                          }).then(()=>{
+                              location.reload();
+                          });
                       })
                 }
               })
@@ -113,7 +124,18 @@ function escribirModalesHTML (arrayProductos){
             let obj = {}
             data.forEach((value,key) => obj[key]=value);
             await updateProductAPI(producto._id, obj);
-            location.reload();
+            Swal.fire({
+                title: `<strong>Producto #${producto._id} actualizado</strong>`,
+                icon: 'success',
+                html: "seras redirigido a la vista de todos los productos",
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+                focusConfirm: false,
+                timer: 5000
+              }).then(()=>{
+                  location.reload();
+              });
         });
 
         document.querySelector(`#borrarProducto-${producto._id}-modal`).addEventListener("click", async () => {
@@ -128,7 +150,18 @@ function escribirModalesHTML (arrayProductos){
               }).then((result) => {
                 if (result.isConfirmed) {
                     deleteProductAPI(producto._id).then(res => {
-                        location.reload();
+                        Swal.fire({
+                            title: `<strong>Producto ${producto.nombre} ELIMINADO!</strong>`,
+                            icon: 'success',
+                            html: "seras redirigido a la vista de todos los productos",
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            focusConfirm: false,
+                            timer: 5000
+                          }).then(()=>{
+                              location.reload();
+                          });
                       })
                 }
               })

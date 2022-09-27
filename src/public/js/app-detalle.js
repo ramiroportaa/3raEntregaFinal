@@ -58,7 +58,7 @@ const renderDetalle = (producto)=>{
 const getData = async ()=>{
   //Obtenemos por LocalStorage del ultimo producto clickeado...
   let idProd = localStorage.getItem("detalle-id");
-  let producto = (await getProductByIdFromAPI(idProd)).data;
+  let producto = await getProductByIdFromAPI(idProd);
   renderDetalle(producto);
 }
 getData();

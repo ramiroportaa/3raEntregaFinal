@@ -8,8 +8,8 @@ let cart = [];
 //Obtener el id del cart del usuario.
 const getIdCartFromAPI = async ()=>{
     let res = await fetch("/api/carrito/current");
-    const data = await res.json();
-    return data.idCart;
+    res = await res.json();
+    return res.data;
 }
 
 //Funciones de inteaccion con la API
@@ -17,15 +17,15 @@ const getIdCartFromAPI = async ()=>{
         //Obtener todos los productos y pushearlos al array de productos.
 const getProductsFromAPI = async ()=>{
     let res = await fetch("/api/productos");
-    const data = await res.json();
-    productos = data.data;
+    res = await res.json();
+    productos = res.data;
 }
         //Obtener un solo producto por su ID.
 const getProductByIdFromAPI = async (id)=>{
     let res = await fetch(`/api/productos/${id}`);
-    const data = await res.json();
-    if (res.status == 404) return alertaInfo(data);
-    return data;
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
+    return res.data;
 }
         //Actualizar un producto pasandole un objeto con las propiedades a cambiar.
 const updateProductAPI = async (id, obj)=>{
@@ -35,10 +35,8 @@ const updateProductAPI = async (id, obj)=>{
         headers:{'Content-Type': 'application/json', "rol": `${rol}`},
         body: productUpdateData
     });
-    if (res.status != 204){
-        const data = await res.json();
-        return alertaInfo(data?.descripcion);
-    }
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
     alertaInfo("producto actualizado exitosamente");
 }
         //crear un producto pasandole un objeto con las propiedades del mismo.
@@ -49,10 +47,8 @@ const addProductAPI = async (obj)=>{
         headers:{'Content-Type': 'application/json', "rol": `${rol}`},
         body: productAddData
     });
-    if (res.status != 201){
-        const data = await res.json();
-        return alertaInfo(data?.descripcion);
-    } 
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
     alertaInfo("Producto creado exitosamente");
 }
         //Eliminar un producto por id.
@@ -61,10 +57,8 @@ const deleteProductAPI = async (id)=>{
         method: "DELETE",
         headers:{"rol": `${rol}`}
     });
-    if (res.status != 204){
-        const data = await res.json();
-        return alertaInfo(data?.descripcion);
-    }
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
     alertaInfo("Producto eliminado exitosamente");
 }
 
@@ -73,15 +67,16 @@ const deleteProductAPI = async (id)=>{
 const getProductsCartFromAPI = async ()=>{
     const id = await getIdCartFromAPI();
     let res = await fetch(`/api/carrito/${id}/productos`);
-    const data = await res.json();
-    if (res.status == 404){
+    if (res.status == 404 || res.status == 401){
         await createCartAPI();
-    }
-    if (data?.error){
-        alertaInfo(data.descripcion);
         return false;
     }
-    cart = data.products;
+    res = await res.json();
+    if (res.error){
+        alertaInfo(res.message);
+        return false;
+    }
+    cart = res.data;
     return true;
 }
         //Crear un carrito en la API y obtener su ID.
@@ -89,9 +84,9 @@ const createCartAPI = async ()=>{
     let res = await fetch("/api/carrito",{
         method: "POST"
     });
-    const data = await res.json();
-    if (res.status != 201) return alertaInfo(data.descripcion);
-    return data.idCart;
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
+    return res.data;
 }
         //Eliminar un carrito completo de la API.
 const deleteCartAPI = async ()=>{
@@ -99,10 +94,8 @@ const deleteCartAPI = async ()=>{
     let res = await fetch(`/api/carrito/${id}`,{
         method: "DELETE"
     });
-    if (res.status != 204){
-        const data = await res.json();
-        return alertaInfo(data);  
-    } 
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
     alertaInfo("Carrito eliminado exitosamente");
 }
         //Agregar un producto al carrito en la API.
@@ -120,11 +113,8 @@ const addProductCartAPI = async (idProd, quantity=1)=>{
                 'Content-Type': 'application/json'
             }
         });
-        if (res.status != 204){
-            const data = await res.json();
-            if (data?.error) return alertaInfo(data.descripcion);
-            return alertaInfo(data);
-        }
+        res = await res.json();
+        if (res.error) return alertaInfo(res.message);
         alertaInfo("Producto agregado al carrito exitosamente");
     } catch (error) {
         alertaInfo(error.message)
@@ -136,10 +126,8 @@ const deleteProductCartAPI = async (idP)=>{
     let res = await fetch(`/api/carrito/${idC}/productos/${idP}`,{
         method: "DELETE"
     });
-    if (res.status != 204){
-        const data = await res.json();
-        return alertaInfo(data);
-    } 
+    res = await res.json();
+    if (res.error) return alertaInfo(res.message);
     alertaInfo("Producto eliminado exitosamente del carrito");
 }
 

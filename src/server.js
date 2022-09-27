@@ -1,4 +1,4 @@
-import __dirname from "./utils.js";
+import __dirname from "./dirname.js";
 import config from "./config.js";
 
 import express from "express";
@@ -18,7 +18,7 @@ import registerRouter from "./routes/registerRouter.js";
 import cluster from "cluster";
 import os from "os";
 
-import logger from "./services/logger.js";
+import logger from "./utils/logger.js";
 
 const app = express();
 

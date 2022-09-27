@@ -1,6 +1,6 @@
-import { ContenedorMongo } from "../contenedores/ContenedorMongo.js";
+import { MongoContainer } from "../containers/mongo.container.js";
 
-class UsersModel extends ContenedorMongo {
+class UsersModel extends MongoContainer {
     constructor(){
         super("user", { 
             email: {type: String, require: true, unique: true},

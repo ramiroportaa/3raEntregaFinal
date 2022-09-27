@@ -1,6 +1,6 @@
-import { ContenedorMongo } from "../contenedores/ContenedorMongo.js";
+import { MongoContainer } from "../containers/mongo.container.js";
 
-class ProductsModel extends ContenedorMongo {
+class ProductsModel extends MongoContainer {
     constructor(){
         super("product", {
             timestamp: {type: Number, require: true},

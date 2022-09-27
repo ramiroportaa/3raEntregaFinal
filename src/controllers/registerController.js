@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import __dirname from "../utils.js";
+import __dirname from "../dirname.js";
 import {usersModel} from "../models/index.js";
-import mailer from "../services/mailer.js";
+import mailer from "../utils/mailer.js";
 import config from "../config.js";
-import logger from "../services/logger.js";
+import logger from "../utils/logger.js";
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));

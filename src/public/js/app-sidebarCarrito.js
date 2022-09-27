@@ -14,25 +14,25 @@ async function escribirProductosCarrito () {
     barraCarritoListaItems.innerHTML = "";
     let total = 0;
     cart.forEach((producto) =>{
-        total += (producto.data.precio * producto.quantity);
+        total += (producto.precio * producto.quantity);
         let contenedor = document.createElement("div");
         contenedor.className = "row mb-2 barraCarrito-item align-items-center";
         contenedor.innerHTML = `
         <div class="col-4">
-        <img class="img-fluid rounded mx-auto d-block" src="${producto.data.foto}" alt="${producto.data.nombre}">
+        <img class="img-fluid rounded mx-auto d-block" src="${producto.foto}" alt="${producto.nombre}">
         </div>
         <div class="col-6">
-        <p>${producto.data.nombre} x ${producto.quantity}</p>
-        <p>$${producto.data.precio}.-</p>
+        <p>${producto.nombre} x ${producto.quantity}</p>
+        <p>$${producto.precio}.-</p>
         </div>
-        <button id="barraCarrito-borrarItem-${producto.data._id}" class="btn col-2" type="button"><i class="fas fa-trash-alt"></i></button>
+        <button id="barraCarrito-borrarItem-${producto._id}" class="btn col-2" type="button"><i class="fas fa-trash-alt"></i></button>
         `
         barraCarritoListaItems.appendChild(contenedor);
         //Almacenamos en constante el nodo de cada boton de borrar Item.
-        const borrarProducto = document.getElementById(`barraCarrito-borrarItem-${producto.data._id}`);
+        const borrarProducto = document.getElementById(`barraCarrito-borrarItem-${producto._id}`);
         //Añadimos manejador de evento click a dicho nodo.
         borrarProducto.addEventListener("click", async () => {
-            await deleteProductCartAPI(producto.data._id);
+            await deleteProductCartAPI(producto._id);
             await renderSidebarCart();
         });
     })

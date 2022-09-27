@@ -29,12 +29,12 @@ const renderOrden = async ()=>{
     await getProductsCartFromAPI();
     let total = 0;
     cart.forEach(producto =>{
-        total += (producto.data.precio * producto.quantity);
+        total += (producto.precio * producto.quantity);
         let liProducto = document.createElement("li");
         liProducto.className = "d-flex align-items-center justify-content-between";
         let liSeparador = document.createElement("li");
         liSeparador.className = "border-bottom my-2";
-        liProducto.innerHTML = `<strong class="small font-weight-bold">(${producto.quantity})-${producto.data.nombre}</strong><span class="text-muted small">$${producto.data.precio*producto.quantity}</span>`;
+        liProducto.innerHTML = `<strong class="small font-weight-bold">(${producto.quantity})-${producto.nombre}</strong><span class="text-muted small">$${producto.precio*producto.quantity}</span>`;
         orden.appendChild(liProducto);
         orden.appendChild(liSeparador);
     });

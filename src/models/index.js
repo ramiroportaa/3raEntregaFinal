@@ -6,9 +6,9 @@ let usersModel;
 
 switch (config.DATABASE) {
     case "mongoDB":
-        const { default: cartsModelDaoMongo } = await import("./daos/cartsModel-mongoDB.js");
-        const { default: productsModelDaoMongo } = await import("./daos/productsModel-mongoDB.js");
-        const { default: usersModelDaoMongo } = await import("./daos/usersModel-mongoDB.js");
+        const { default: cartsModelDaoMongo } = await import("./daos/cartsModel.mongo.dao.js");
+        const { default: productsModelDaoMongo } = await import("./daos/productsModel.mongo.dao.js");
+        const { default: usersModelDaoMongo } = await import("./daos/usersModel.mongo.dao.js");
 
         cartsModel = cartsModelDaoMongo;
         productsModel = productsModelDaoMongo;
@@ -17,9 +17,9 @@ switch (config.DATABASE) {
         break;
 
     case "firebase":
-        const { default: cartsModelDaoFirebase } = await import("./daos/cartsModel-firebase.js");
-        const { default: productsModelDaoFirebase } = await import("./daos/productsModel-firebase.js");
-        const { default: usersModelDaoFirebase } = await import("./daos/usersModel-mongoDB.js");
+        const { default: cartsModelDaoFirebase } = await import("./daos/cartsModel.firebase.dao.js");
+        const { default: productsModelDaoFirebase } = await import("./daos/productsModel.firebase.dao.js");
+        const { default: usersModelDaoFirebase } = await import("./daos/usersModel.mongo.dao.js");
 
         cartsModel = cartsModelDaoFirebase;
         productsModel = productsModelDaoFirebase;

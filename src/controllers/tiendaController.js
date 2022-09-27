@@ -1,9 +1,10 @@
-import __dirname from "../utils.js";
-import {cartsModel, usersModel} from "../models/index.js";
-import mailer from "../services/mailer.js";
-import twilioClient from "../services/twilioClient.js";
+import __dirname from "../dirname.js";
+import cartsService from "../services/carts.service.js";
+import WSresponse from "../libs/WSresponse.js";
+import mailer from "../utils/mailer.js";
+import twilioClient from "../utils/twilioClient.js";
 import config from "../config.js";
-import logger from "../services/logger.js";
+import logger from "../utils/logger.js";
 
 const userInfo = (req, res, next)=>{
   req.userInfo = req.isAuthenticated()
@@ -46,12 +47,12 @@ const getDetalle = (req, res) => {
 };
 
 const newOrder = async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(400).json('Debes iniciar sesión para realizar pedidos');
+  if (!req.isAuthenticated()) return res.status(400).json(new WSresponse(null, 'Debes iniciar sesión para realizar pedidos', true));
 
   const idCart = req.user.currentCart;
-  const order = (await cartsModel.getById(idCart)).data;
+  const order = await cartsService.getById(idCart);
 
-  if (!order.productos) return res.status(400).json('No se pueden enviar ordenes vacías!');
+  if (!order.productos) return res.status(400).json(new WSresponse(null, 'No se pueden enviar ordenes vacías!', true));
 
   //Envío de mail con los datos del nuevo pedido.
   const mailOptions = {
@@ -71,10 +72,10 @@ const newOrder = async (req, res) => {
     <h2 style="color: blue"> Productos en la orden </h2>
     <ul>
       ${order.productos.map(prod =>{
-        return `<li>Nombre: ${prod.data.nombre} | Codigo: ${prod.data.codigo} | Precio unitario: ${prod.data.precio} | Cantidad: ${prod.quantity} | Total: ${prod.data.precio * prod.quantity}</li>`
+        return `<li>Nombre: ${prod.nombre} | Codigo: ${prod.codigo} | Precio unitario: ${prod.precio} | Cantidad: ${prod.quantity} | Total: ${prod.precio * prod.quantity}</li>`
       }).join("")}
     </ul>
-    <p>TOTAL DE LA ORDEN: ${order.productos.reduce((acc, act) => acc + act.data.precio * act.quantity, 0)}</p>
+    <p>TOTAL DE LA ORDEN: ${order.productos.reduce((acc, act) => acc + act.precio * act.quantity, 0)}</p>
     `
   }
 
@@ -93,10 +94,10 @@ const newOrder = async (req, res) => {
 
     *Productos en la orden*
       ${order.productos.map(prod =>{
-        return `- Nombre: ${prod.data.nombre} | Codigo: ${prod.data.codigo} | Precio unitario: ${prod.data.precio} | Cantidad: ${prod.quantity} | Total: ${prod.data.precio * prod.quantity}`
+        return `- Nombre: ${prod.nombre} | Codigo: ${prod.codigo} | Precio unitario: ${prod.precio} | Cantidad: ${prod.quantity} | Total: ${prod.precio * prod.quantity}`
       }).join("\n")}
 
-    *TOTAL DE LA ORDEN: ${order.productos.reduce((acc, act) => acc + act.data.precio * act.quantity, 0)}*
+    *TOTAL DE LA ORDEN: ${order.productos.reduce((acc, act) => acc + act.precio * act.quantity, 0)}*
     `,
     from: `whatsapp:${config.twilioWhatsappFrom}`,
     to: `whatsapp:${config.twilioWhatsappTo}`
@@ -117,11 +118,10 @@ const newOrder = async (req, res) => {
       logger.warn(error);
   }
 
-  //Borro carrito y actualizo currentCart de user.
-  await cartsModel.deleteById(idCart);
-  await usersModel.updateOne(req.user._id, {currentCart: ""});
-
-  res.status(201).json({idCart, message: "Orden enviada, espere a ser contactado por alguno de nuestros agentes de ventas!"});
+  //Borro carrito.
+  await cartsService.deleteById(idCart, req.user._id);
+  
+  res.status(201).json(new WSresponse(idCart, "Orden enviada, espere a ser contactado por alguno de nuestros agentes de ventas!"));
 };
 
 export default {

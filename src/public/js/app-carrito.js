@@ -16,58 +16,58 @@ const renderCart = async()=>{
     //Tambien el evento click sobre el icono de basurero para llamar el metodo "borrarProducto" de la orden.
     //Tambien modificamos total
     cart.forEach(producto => {
-        total += (producto.data.precio * producto.quantity);
+        total += (producto.precio * producto.quantity);
         $("#productos").append(`<tr>
                                 <th class="pl-0 border-0" scope="row">
-                                <div class="media align-items-center"><a id="detalle-${producto.data._id}" class="reset-anchor d-block" href="/tienda/detalle"><img src="${producto.data.foto}" alt="${producto.data.nombre}" width="70"/></a>
-                                    <div class="media-body ms-3"><strong class="h6"><a id="detalle2-${producto.data._id}" class="reset-anchor" href="/tienda/detalle">${producto.data.nombre}</a></strong></div>
+                                <div class="media align-items-center"><a id="detalle-${producto._id}" class="reset-anchor d-block" href="/tienda/detalle"><img src="${producto.foto}" alt="${producto.nombre}" width="70"/></a>
+                                    <div class="media-body ms-3"><strong class="h6"><a id="detalle2-${producto._id}" class="reset-anchor" href="/tienda/detalle">${producto.nombre}</a></strong></div>
                                 </div>
                                 </th>
                                 <td class="align-middle border-0">
-                                    <p class="mb-0 small">$${producto.data.precio}</p>
+                                    <p class="mb-0 small">$${producto.precio}</p>
                                 </td>
                                 <td class="align-middle border-0">
                                 <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Cantidad</span>
                                     <div class="quantity">
-                                        <input id="cantidad-carrito-${producto.data._id}" class="form-control form-control-sm border-0 shadow-0 p-0" type="number" value="${producto.quantity}" min="1" max="${producto.data.stock}"/>
-                                        <button id="cantidad-carrito-${producto.data._id}-modificar" class="ps-2">Modificar</button>
+                                        <input id="cantidad-carrito-${producto._id}" class="form-control form-control-sm border-0 shadow-0 p-0" type="number" value="${producto.quantity}" min="1" max="${producto.stock}"/>
+                                        <button id="cantidad-carrito-${producto._id}-modificar" class="ps-2">Modificar</button>
                                     </div>
                                 </div>
                                 </td>
                                 <td class="align-middle border-0">
-                                    <p id="total-${producto.data._id}" class="mb-0 small">$${producto.data.precio*producto.quantity}</p>
+                                    <p id="total-${producto._id}" class="mb-0 small">$${producto.precio*producto.quantity}</p>
                                 </td>
-                                <td id="carrito-borrarItem-${producto.data._id}" class="align-middle border-0"><a class="reset-anchor" href="#"><i class="fas fa-trash-alt small text-muted"></i></a></td>
+                                <td id="carrito-borrarItem-${producto._id}" class="align-middle border-0"><a class="reset-anchor" href="#"><i class="fas fa-trash-alt small text-muted"></i></a></td>
                             </tr> `);
         
-        document.querySelector(`#carrito-borrarItem-${producto.data._id}`).addEventListener("click", async () => {
-            await deleteProductCartAPI(producto.data._id);
+        document.querySelector(`#carrito-borrarItem-${producto._id}`).addEventListener("click", async () => {
+            await deleteProductCartAPI(producto._id);
             await renderSidebarCart();
             await renderCart();
         });
 
-        $(`#cantidad-carrito-${producto.data._id}-modificar`).click(async function() {
-            let cantidad = document.querySelector(`#cantidad-carrito-${producto.data._id}`).value
+        $(`#cantidad-carrito-${producto._id}-modificar`).click(async function() {
+            let cantidad = document.querySelector(`#cantidad-carrito-${producto._id}`).value
             cantidad = parseInt(cantidad);
-            if (producto.data.stock < cantidad) return alertaInfo(`Solo quedan ${producto.data.stock} unidades`);
-            await deleteProductCartAPI(producto.data._id);
-            await addProductCartAPI(producto.data._id, cantidad);
+            if (producto.stock < cantidad) return alertaInfo(`Solo quedan ${producto.stock} unidades`);
+            await deleteProductCartAPI(producto._id);
+            await addProductCartAPI(producto._id, cantidad);
             await renderCart();
             return alertaInfo(`Modificación del carrito exitosa`);
         });
 
-        $(`#total-${producto.data._id}`).text(`$${producto.data.precio*producto.quantity}`);
+        $(`#total-${producto._id}`).text(`$${producto.precio*producto.quantity}`);
         //Modificamos el DOM del total de la Orden.
         $("#subtotalOrden").text(`$${total}.-`)
         $("#totalOrden").text(`$${total}.-`)
         $("#descOrden").addClass("d-none");
 
         //Añadimos manejador de evento click para almacenar variable en LocalStorage y transmitirla al js de detalle al hacer click en la imagen o en el nombre.
-        $(`#detalle-${producto.data._id}`).click( () => {
-            localStorage.setItem("detalle-id", producto.data._id);
+        $(`#detalle-${producto._id}`).click( () => {
+            localStorage.setItem("detalle-id", producto._id);
         });
-        $(`#detalle2-${producto.data._id}`).click( () => {
-            localStorage.setItem("detalle-id", producto.data._id);
+        $(`#detalle2-${producto._id}`).click( () => {
+            localStorage.setItem("detalle-id", producto._id);
         });
     });
     btnDeleteCart.classList.add("d-block");

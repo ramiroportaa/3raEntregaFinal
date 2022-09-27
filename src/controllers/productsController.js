@@ -1,44 +1,54 @@
-import {productsModel} from "../models/index.js";
+import productsService from "../services/products.service.js";
+import WSresponse from "../libs/WSresponse.js";
 
 const getAll = async (req, res)=>{
-    const products = await productsModel.getAll();
-    if (products?.error) return res.status(products.error.status).json(products.error.message);
-    res.status(200).json(products);
+    try {
+        const data = await productsService.getAll();
+        res.status(200).json(new WSresponse(data, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
 };
 
 const getById = async (req, res)=>{
-    const id = req.params.id;
-    const product = await productsModel.getById(id);
-    if (product?.error) return res.status(product.error.status).json(product.error.message);
-    res.status(200).json(product);
+    try {
+        const idProd = req.params.id;
+        const data = await productsService.getById(idProd);
+        res.status(200).json(new WSresponse(data, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
 };
 
 const add = async (req, res)=>{
-    const product = req.body;
-    const data = await productsModel.add(product);
-    if (data?.error) return res.status(data.error.status).json(data.error.message);
-    res.sendStatus(201);
+    try {
+        const product = req.body;
+        const data = await productsService.add(product);
+        res.status(201).json(new WSresponse(data, "success"));        
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
 };
 
 const updateById = async (req, res)=>{
-    const id = req.params.id;
-    let product = {}
-    const prodArray = Object.entries(req.body);
-    prodArray.forEach(entries =>{
-        if (entries[1]){
-            product[entries[0]] = entries[1];
-        }
-    })
-    const data = await productsModel.updateOne(id, product);
-    if (data?.error) return res.status(data.error.status).json(data.error.message);
-    res.sendStatus(204);
+    try {
+        const idProd = req.params.id;
+        const newDataObj = req.body;
+        await productsService.updateById(idProd, newDataObj);
+        res.status(201).json(new WSresponse(null, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
 };
 
 const deleteById = async (req, res)=>{
-    const id = req.params.id;
-    const data = await productsModel.deleteById(id);
-    if (data?.error) return res.status(data.error.status).json(data.error.message);
-    res.sendStatus(204);
+    try {
+        const idProd = req.params.id;
+        await productsService.deleteById(idProd);
+        res.status(201).json(new WSresponse(null, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
 };
 
 export default {
