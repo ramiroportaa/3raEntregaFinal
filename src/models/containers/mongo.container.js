@@ -24,7 +24,8 @@ export class MongoContainer {
     async getById(id){
         try {
             const data = await this.model.findOne({_id: id});
-            return data;
+            //Se accede al atributo ._doc ya que mongo devuelve un objeto con mucha info de mas.. y la data necesaria esta en el ._doc
+            return data?._doc;
         } catch (error) {
             logger.warn(`Mongo model container: error in getting ${this.collection} by id: ${error}`);
             throw {message: `error in getting ${this.collection}`, status: 500};

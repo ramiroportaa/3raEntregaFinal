@@ -1,10 +1,43 @@
 import {productsModel, cartsModel, usersModel} from "../models/index.js";
+import cartDTO from "../models/dtos/cart.DTO.js";
 
 const getProducts = async (idCart)=>{
     try {
-        const data = await cartsModel.getById(idCart);
-        if (!data) throw {message: `no cart with ID: ${idCart}`, status: 404};
-        return data.productos; 
+        const cartData = await cartsModel.getById(idCart);
+        if (!cartData) throw {message: `no cart with ID: ${idCart}`, status: 404};
+
+        //Array para almacenar los productos del carrito a los que se debe actualizar el quantity por ser mayor al stock actual.
+        let isUpdateCart = [];
+
+        const productsArray = await Promise.all(cartData.productos.map(async prodInCart => {
+            const productData = await productsModel.getById(prodInCart.idProd);
+
+            //Revalidación de stock (ya que el mismo puede haber cambiado y en el cart quedo una cantidad mayor).
+            if (prodInCart.quantity > productData.stock){
+                prodInCart.quantity = productData.stock;
+                isUpdateCart.push(prodInCart);
+            }
+
+            productData.quantity = prodInCart.quantity;
+
+            return productData;
+        }))
+
+        if (isUpdateCart){
+            const newProductsCartData = cartData.productos.map(prod =>{
+                isUpdateCart.forEach(prodToUpdate => {
+                    if (prod.idProd == prodToUpdate.idProd) return prodToUpdate;
+                })
+                return prod;
+            })
+
+            cartsModel.updateOne(idCart, {productos: newProductsCartData});
+        }
+
+        const cart = new cartDTO(cartData, productsArray);
+
+        return cart.productos;
+        
     } catch (error) {
         throw error;
     }
@@ -26,27 +59,28 @@ const createCart = async (userId)=>{
 const addProduct = async (idCart, idProd, quantity)=>{
 
     try {
-        //Se accede al atributo ._doc ya que mongo devuelve un objeto con mucha info de mas.. y la data necesaria esta en el ._doc
-        const product = (await productsModel.getById(idProd))._doc;
+        const product = await productsModel.getById(idProd);
         if (!product) throw {message: `no product with ID: ${idProd}`, status: 404};
+        const stock = product.stock;
+
         const cart = await cartsModel.getById(idCart);
         if (!cart) throw {message: `no cart with ID: ${idCart}`, status: 404};
         const ArrayProducts = cart?.productos;
-        const prodInCart = ArrayProducts.find(prod => prod._id == idProd);
+
+        const prodInCart = ArrayProducts.find(prod => prod.idProd == idProd);
 
         quantity = Number(quantity);
         if (quantity == 0) throw {message: "Debes agregar al menos 1 unidad", status: 400};
 
         if (!prodInCart){
-            product.quantity = quantity;
-            if (quantity > product.stock) throw {message: `Stock insuficiente: solo quedan ${product.stock} unidades`, status: 400};
-            ArrayProducts.push(product);
+            if (quantity > stock) throw {message: `Stock insuficiente: solo quedan ${stock} unidades`, status: 400};
+            ArrayProducts.push({idProd,quantity});
         }else{
             const newQuantity = prodInCart.quantity + quantity;
-            if (newQuantity > product.stock) throw {message: `Stock insuficiente: solo puedes agregar ${product.stock - prodInCart.quantity} unidades mas`, status: 400};
+            if (newQuantity > stock) throw {message: `Stock insuficiente: solo puedes agregar ${stock - prodInCart.quantity} unidades mas`, status: 400};
             prodInCart.quantity = newQuantity;
             ArrayProducts.map(prod =>{
-                if (prod._id == idProd) return prodInCart;
+                if (prod.idProd == idProd) return prodInCart;
                 return prod;
             })
         }
@@ -72,7 +106,7 @@ const deleteProductById = async (idCart, idProd)=>{
     try {
         const cart = await cartsModel.getById(idCart);
         if (!cart) throw {message: `no cart with ID: ${idCart}`, status: 404};
-        const productos = cart.productos.filter(prod => prod._id != idProd);
+        const productos = cart.productos.filter(prod => prod.idProd != idProd);
         await cartsModel.updateOne(idCart, {productos});
     } catch (error) {
         throw error;
