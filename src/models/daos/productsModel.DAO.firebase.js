@@ -1,19 +1,19 @@
-import { FirebaseContainer } from "../containers/container.DAO.firebase.js";
+import { FirebaseContainer } from "./containers/container.DAO.firebase.js";
 
 let instance = null;
 
-class ProductsModel extends FirebaseContainer {
+class ProductDAO extends FirebaseContainer {
     constructor(){
         super("products");
     }
 
     static getInstance(){
         if(!instance){
-            instance = new ProductsModel();
+            instance = new ProductDAO();
         }
         
         return instance;
     }
 }
 
-export default ProductsModel;
+export default ProductDAO;

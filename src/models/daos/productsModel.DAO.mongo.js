@@ -1,27 +1,20 @@
-import { MongoContainer } from "../containers/container.DAO.mongo.js";
+import { MongoContainer } from "./containers/container.DAO.mongo.js";
+import productModel from "../product.model.js";
 
 let instance = null;
 
-class ProductsModel extends MongoContainer {
+class ProductDAO extends MongoContainer {
     constructor(){
-        super("product", {
-            timestamp: {type: Number, require: true},
-            nombre: {type: String, require: true},
-            descripcion: String,
-            codigo: String,
-            foto: String,
-            precio: {type: Number, require: true},
-            stock: {type: Number, require: true}
-        })
+        super("product", productModel);
     }
 
     static getInstance(){
         if(!instance){
-            instance = new ProductsModel();
+            instance = new ProductDAO();
         }
         
         return instance;
     }
 }
 
-export default ProductsModel;
+export default ProductDAO;

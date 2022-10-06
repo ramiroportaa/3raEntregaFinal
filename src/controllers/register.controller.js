@@ -3,7 +3,7 @@ import __dirname from "../dirname.js";
 import mailer from "../utils/mailer.js";
 import config from "../config.js";
 import logger from "../utils/logger.js";
-import DAOFactory from "../models/DAOFactory.js";
+import DAOFactory from "../models/daos/DAOFactory.js";
 
 const usersDAO = DAOFactory.createDao("user", config.DATABASE);
 

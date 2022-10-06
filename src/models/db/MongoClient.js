@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import logger from "../utils/logger.js";
+import logger from "../../utils/logger.js";
 import DBClient from "./DBClient.class.js";
-import config from "../config.js";
+import config from "../../config.js";
 
 class MongoClient extends DBClient {
   constructor() {

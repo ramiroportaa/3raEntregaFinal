@@ -1,22 +1,19 @@
-import { MongoContainer } from "../containers/container.DAO.mongo.js";
+import { MongoContainer } from "./containers/container.DAO.mongo.js";
+import cartModel from "../cart.model.js";
 
 let instance = null;
 
-class CartModel extends MongoContainer {
+class CartDAO extends MongoContainer {
     constructor(){
-        super("cart", {
-            timestamp: {type: Number, require: true},
-            productos: {type: Array, require: true}
-        })
+        super("cart", cartModel);
     }
 
     static getInstance(){
         if(!instance){
-            instance = new CartModel();
+            instance = new CartDAO();
         }
-        
         return instance;
     }
 }
 
-export default CartModel;
+export default CartDAO;

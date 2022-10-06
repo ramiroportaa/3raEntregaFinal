@@ -1,6 +1,6 @@
 import cartDTO from "../models/dtos/cart.DTO.js";
 import config from "../config.js";
-import DAOFactory from "../models/DAOFactory.js";
+import DAOFactory from "../models/daos/DAOFactory.js";
 
 const cartsDAO = DAOFactory.createDao("cart", config.DATABASE);
 const productsDAO = DAOFactory.createDao("product", config.DATABASE);

@@ -14,6 +14,10 @@ class DAO {
     async deleteById(){
         throw {message: "Method deleteById() not implemented in subClass", status: 500};
     }
+
+    static getInstance(){
+        throw {message: "Method getInstance() not implemented in subClass", status: 500};
+    }
 }
 
 export default DAO;

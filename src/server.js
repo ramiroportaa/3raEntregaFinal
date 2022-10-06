@@ -14,7 +14,7 @@ import logger from "./utils/logger.js";
 
 import router from "./routes/index.js";
 
-import DBFactory from "./models/DBFactory.js";
+import DBFactory from "./models/db/DBFactory.js";
 
 const app = express();
 

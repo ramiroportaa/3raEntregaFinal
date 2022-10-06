@@ -1,12 +1,11 @@
-import mongoose from "mongoose";
-import logger from "../../utils/logger.js";
+import logger from "../../../utils/logger.js";
 import DAO from "./DAO.class.js";
 
 export class MongoContainer extends DAO {
-    constructor(collectionName, schema){
+    constructor(collectionName, model){
         super();
         this.collection = collectionName;
-        this.model = mongoose.model(collectionName, mongoose.Schema(schema));
+        this.model = model;
     }
     async getAll(){
         try {

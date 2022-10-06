@@ -1,5 +1,5 @@
 import config from "../config.js";
-import DAOFactory from "../models/DAOFactory.js";
+import DAOFactory from "../models/daos/DAOFactory.js";
 
 const productsDAO = DAOFactory.createDao("product", config.DATABASE);
 

@@ -3,7 +3,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import config from "../config.js";
-import DAOFactory from "../models/DAOFactory.js";
+import DAOFactory from "../models/daos/DAOFactory.js";
 
 const usersDAO = DAOFactory.createDao("user", config.DATABASE);
 

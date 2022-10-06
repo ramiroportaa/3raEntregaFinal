@@ -1,11 +1,16 @@
 import admin from "firebase-admin";
-import logger from "../../utils/logger.js";
+import logger from "../../../utils/logger.js";
 import DAO from "./DAO.class.js";
+import config from "../../../config.js";
 
-// admin.initializeApp({
-//     credential: admin.credential.cert(config.firebase)
-// });
-// const db = admin.firestore();
+let db;
+
+if (config.DATABASE == "firebase"){
+    admin.initializeApp({
+        credential: admin.credential.cert(config.firebase)
+    });
+    db = admin.firestore();
+}
 
 export class FirebaseContainer extends DAO {
     constructor(collectionName){
