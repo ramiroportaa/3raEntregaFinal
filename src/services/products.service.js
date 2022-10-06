@@ -1,8 +1,11 @@
-import {productsModel} from "../models/index.js";
+import config from "../config.js";
+import DAOFactory from "../models/DAOFactory.js";
+
+const productsDAO = DAOFactory.createDao("product", config.DATABASE);
 
 const getAll = async () => {
     try {
-        const products = await productsModel.getAll();
+        const products = await productsDAO.getAll();
         return products;
     } catch (error) {
         throw error;
@@ -11,7 +14,7 @@ const getAll = async () => {
 
 const getById = async (idProd)=>{
     try {
-        const product = await productsModel.getById(idProd);
+        const product = await productsDAO.getById(idProd);
         if (!product) throw {message: `no product with ID: ${idProd}`, status: 404};
         return product;
     } catch (error) {
@@ -21,7 +24,7 @@ const getById = async (idProd)=>{
 
 const add = async (product)=>{
     try {
-        const data = await productsModel.add(product);
+        const data = await productsDAO.add(product);
         return data;
     } catch (error) {
         throw error;
@@ -37,7 +40,7 @@ const updateById = async (idProd, newDataObj)=>{
                 product[entries[0]] = entries[1];
             }
         })
-        await productsModel.updateOne(idProd, product);
+        await productsDAO.updateOne(idProd, product);
     } catch (error) {
         throw error;
     }
@@ -45,7 +48,7 @@ const updateById = async (idProd, newDataObj)=>{
 
 const deleteById = async (idProd)=>{
     try {
-        await productsModel.deleteById(idProd);
+        await productsDAO.deleteById(idProd);
     } catch (error) {
         throw error;
     }

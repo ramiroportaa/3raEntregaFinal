@@ -14,6 +14,8 @@ import logger from "./utils/logger.js";
 
 import router from "./routes/index.js";
 
+import DBFactory from "./models/DBFactory.js";
+
 const app = express();
 
 const isCluster = config.MODO == "CLUSTER";
@@ -29,6 +31,10 @@ if (isCluster && cluster.isPrimary) {
     })
     
 }else{
+    
+    const dbClient = DBFactory.createDBclient(config.DATABASE);
+    dbClient.connect();
+
     app.use(cookieParser());
 
     app.use(express.json());

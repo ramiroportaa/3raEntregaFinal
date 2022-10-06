@@ -1,14 +1,10 @@
 import mongoose from "mongoose";
-import config from "../../config.js";
 import logger from "../../utils/logger.js";
+import DAO from "./DAO.class.js";
 
-mongoose.connect(config.URLMongo, (err, res)=>{
-    if (err) throw err;
-    return logger.info("Base de datos conectada.");
-})
-
-export class MongoContainer {
+export class MongoContainer extends DAO {
     constructor(collectionName, schema){
+        super();
         this.collection = collectionName;
         this.model = mongoose.model(collectionName, mongoose.Schema(schema));
     }

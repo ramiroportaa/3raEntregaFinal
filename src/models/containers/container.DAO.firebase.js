@@ -1,15 +1,15 @@
 import admin from "firebase-admin";
-import config from "../../config.js";
 import logger from "../../utils/logger.js";
+import DAO from "./DAO.class.js";
 
-admin.initializeApp({
-    credential: admin.credential.cert(config.firebase)
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(config.firebase)
+// });
+// const db = admin.firestore();
 
-const db = admin.firestore();
-
-export class FirebaseContainer {
+export class FirebaseContainer extends DAO {
     constructor(collectionName){
+        super();
         this.collectionName = collectionName;
         this.collection = db.collection(collectionName);
     }
@@ -23,7 +23,7 @@ export class FirebaseContainer {
                 obj._id = doc.id
                 data.push(obj)
             });
-            return {data};
+            return data;
         } catch (error) {
             logger.warn(`error in getting ${this.collectionName}: ${error}`);
             return {error: {message: `error in getting ${this.collectionName}`, status: 500}};
@@ -34,7 +34,7 @@ export class FirebaseContainer {
             const doc = await this.collection.doc(id).get();
             const data = doc.data();
             data._id = id;
-            if (data) return {data};
+            if (data) return data;
             return {error: {message: `no ${this.collectionName} with ID: ${id}`, status: 404}};
         } catch (error) {
             logger.warn(`error in getting ${this.collectionName}: ${error}`);

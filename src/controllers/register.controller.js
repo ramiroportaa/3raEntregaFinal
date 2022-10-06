@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
 import __dirname from "../dirname.js";
-import {usersModel} from "../models/index.js";
 import mailer from "../utils/mailer.js";
 import config from "../config.js";
 import logger from "../utils/logger.js";
+import DAOFactory from "../models/DAOFactory.js";
+
+const usersDAO = DAOFactory.createDao("user", config.DATABASE);
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -18,7 +20,7 @@ const postRegister = async (req, res)=>{
     newUser.password = createHash(req.body.password);
     newUser.avatar = `/uploads/${req.file.filename}`;
 
-    const userDB = await usersModel.add(newUser);
+    const userDB = await usersDAO.add(newUser);
     if (!userDB) return res.render("error.ejs", {error: "El usuario o el mail ya están registrados"});
 
     //Envío de mail con los datos del nuevo registro.

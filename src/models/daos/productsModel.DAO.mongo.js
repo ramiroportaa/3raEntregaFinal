@@ -1,4 +1,6 @@
-import { MongoContainer } from "../containers/mongo.container.js";
+import { MongoContainer } from "../containers/container.DAO.mongo.js";
+
+let instance = null;
 
 class ProductsModel extends MongoContainer {
     constructor(){
@@ -12,6 +14,14 @@ class ProductsModel extends MongoContainer {
             stock: {type: Number, require: true}
         })
     }
+
+    static getInstance(){
+        if(!instance){
+            instance = new ProductsModel();
+        }
+        
+        return instance;
+    }
 }
 
-export default new ProductsModel();
+export default ProductsModel;

@@ -2,7 +2,10 @@ import __dirname from "../dirname.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import {usersModel} from "../models/index.js";
+import config from "../config.js";
+import DAOFactory from "../models/DAOFactory.js";
+
+const usersDAO = DAOFactory.createDao("user", config.DATABASE);
 
 const isValidPassword = (password, encPassword) =>{
     const isValid = bcrypt.compareSync(password, encPassword);
@@ -12,7 +15,7 @@ const isValidPassword = (password, encPassword) =>{
 passport.use("login", new LocalStrategy(
     { usernameField: "email"},
     async (email, password, done) => {
-        const user = await usersModel.getByEmail(email);
+        const user = await usersDAO.getByEmail(email);
 
         if (!user || !isValidPassword(password, user.password)) return done(null, false);
 
@@ -24,7 +27,7 @@ passport.serializeUser((user, done) => {
     done(null, user.email);
 });
 passport.deserializeUser(async (email, done) => {
-    const user = await usersModel.getByEmail(email);
+    const user = await usersDAO.getByEmail(email);
     done(null, user);
 });
 
